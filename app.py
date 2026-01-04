@@ -85,6 +85,7 @@ class DDNSApp:
     def __init__(self, root):
         self.root = root
         self.root.title(f"GoobyDDNS {APP_VERSION}")
+        self.root.iconbitmap(BASE_PATH / "goobyddns.ico")
         self.root.resizable(False, False)
 
         self.last_ip = None
@@ -99,7 +100,7 @@ class DDNSApp:
         self.root.protocol("WM_DELETE_WINDOW", self.hide_to_tray)
 
     def show_check_for_updates(self):
-        webbrowser.open("https://github.com/GoobyFRS/GoobyDDNS")
+        webbrowser.open("https://https://github.com/GoobyFRS/GoobyDDNS")
 
     def build_ui(self):
         frame = ttk.Frame(self.root, padding=10)

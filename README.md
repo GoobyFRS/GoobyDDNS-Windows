@@ -14,3 +14,9 @@ GoobyDDNS Client for Windows.
 - Linode-CLI Domain Record ID
 - Linode-CLU Subdomain Record ID
 
+### Build Process
+
+```shell
+venv\Scripts\activate
+pyinstaller --onefile --noconsole --add-data "template.ini;." --add-data "goobyddns.ico;." app.py
+```
