@@ -18,3 +18,5 @@ GoobyDDNS Client for Windows. It's like the NoIP DUC but for your own domain and
 venv\Scripts\activate
 pyinstaller --onefile --noconsole --add-data "template.ini;." --add-data "goobyddns.ico;." app.py
 ```
+
+Linux Users should consider [GoobyDDNS_Linux]()
