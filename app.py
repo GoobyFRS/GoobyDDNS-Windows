@@ -14,9 +14,10 @@ from PIL import Image, ImageDraw
 from pathlib import Path
 from datetime import datetime
 
-APP_VERSION = str("0.9.1")
+APP_VERSION = str("0.9.2-build-c")
 APP_NAME = "GoobyDDNS"
-CHECK_INTERVAL = 300  # seconds
+CHECK_INTERVAL = 600  # 10 Minutes
+
 CONFIG_NAME = "running_config.ini"
 TEMPLATE_NAME = "template.ini"
 
@@ -85,8 +86,11 @@ class DDNSApp:
     def __init__(self, root):
         self.root = root
         self.root.title(f"GoobyDDNS {APP_VERSION}")
-        self.root.iconbitmap(BASE_PATH / "goobyddns.ico")
-        self.root.resizable(False, False)
+        #self.root.iconbitmap(BASE_PATH / "goobyddns.ico")
+        self.root.geometry("220x120")
+        self.root.minsize(220, 80)
+        self.root.maxsize(520, 160)
+        #self.root.resizable(True, False)
 
         self.last_ip = None
         self.tray_icon = None
