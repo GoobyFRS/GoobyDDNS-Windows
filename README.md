@@ -1,8 +1,12 @@
 # GoobyDDNS-Windows
 
-GoobyDDNS Client for Windows. It's like the NoIP DUC but for your own domain and with Akamai / Linode Name Servers. __I'll add multi-platform support at 10 Stars__
+GoobyDDNS Client for Windows. It's like the NoIP DUC but for your own domain and with Akamai / Linode Name Servers. __I'll add multi-platform support at 10 Stars__.
 
-## You'll Need
+![img](URL)
+
+## Setup 
+
+**You'll need...**
 
 - Linode API/PAT Key with Domain R/W Access
 - Linode-CLI Domain Record ID
