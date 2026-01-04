@@ -2,16 +2,19 @@
 import tkinter as tk
 from tkinter import ttk
 import threading
+import webbrowser
 import time
 import requests
 import json
 import configparser
 import shutil
 import sys
+import pystray
+from PIL import Image, ImageDraw
 from pathlib import Path
 from datetime import datetime
 
-APP_VERSION = str("0.9.0")
+APP_VERSION = str("0.9.1")
 APP_NAME = "GoobyDDNS"
 CHECK_INTERVAL = 300  # seconds
 CONFIG_NAME = "running_config.ini"
@@ -69,8 +72,15 @@ def update_dns_record(my_public_ip):
     response = requests.put(url, headers=headers, data=json.dumps(payload), timeout=10)
     return response.status_code == 200
 
-# ---------------- GUI APP ---------------- #
+# ---------------- NON-CLASS CORE FUNCTIONS ---------------- #
+def create_tray_image():
+    image = Image.new("RGB", (64, 64), "black")
+    draw = ImageDraw.Draw(image)
+    draw.ellipse((16, 16, 48, 48), fill="green")
+    return image
 
+
+# ---------------- GUI APP ---------------- #
 class DDNSApp:
     def __init__(self, root):
         self.root = root
@@ -78,35 +88,52 @@ class DDNSApp:
         self.root.resizable(False, False)
 
         self.last_ip = None
+        self.tray_icon = None
 
         self.build_ui()
+        self.build_menu()
         self.update_clock()
         self.start_ddns_thread()
+
+        # Intercept window close → tray
+        self.root.protocol("WM_DELETE_WINDOW", self.hide_to_tray)
+
+    def show_check_for_updates(self):
+        webbrowser.open("https://github.com/GoobyFRS/GoobyDDNS")
 
     def build_ui(self):
         frame = ttk.Frame(self.root, padding=10)
         frame.grid()
 
-        # Status indicator
+        # Status Indicator
         self.status_canvas = tk.Canvas(frame, width=20, height=20, highlightthickness=0)
         self.status_dot = self.status_canvas.create_oval(2, 2, 18, 18, fill="gray")
         self.status_canvas.grid(row=0, column=0, rowspan=2, padx=5)
-
+        # Display the Domain Info
         ttk.Label(frame, text="FQDN:").grid(row=0, column=1, sticky="w")
         self.fqdn_label = ttk.Label(frame, text=FQDN)
         self.fqdn_label.grid(row=0, column=2, sticky="w")
-
+        # Last Known IP
         ttk.Label(frame, text="Last IP:").grid(row=1, column=1, sticky="w")
         self.ip_label = ttk.Label(frame, text="—")
         self.ip_label.grid(row=1, column=2, sticky="w")
-
+        # Last Check Time
         ttk.Label(frame, text="Last Check:").grid(row=2, column=1, sticky="w")
         self.last_check_label = ttk.Label(frame, text="—")
         self.last_check_label.grid(row=2, column=2, sticky="w")
-
+        # Current Time
         ttk.Label(frame, text="Local Time:").grid(row=3, column=1, sticky="w")
         self.clock_label = ttk.Label(frame, text="—")
         self.clock_label.grid(row=3, column=2, sticky="w")
+
+    def build_menu(self):
+        menubar = tk.Menu(self.root)
+        file_menu = tk.Menu(menubar, tearoff=0)
+        file_menu.add_command(label="Check for Updates", command=self.show_check_for_updates)
+        file_menu.add_separator()
+        file_menu.add_command(label="Exit", command=self.exit_app)
+        menubar.add_cascade(label="File", menu=file_menu)
+        self.root.config(menu=menubar)
 
     # ---------------- UI HELPERS ---------------- #
     def set_status(self, color):
@@ -116,6 +143,31 @@ class DDNSApp:
         now = datetime.now().strftime("%H:%M:%S")
         self.clock_label.config(text=now)
         self.root.after(10_000, self.update_clock)
+    
+    # ---------------- SYSTEM TRAY ---------------- #
+
+    def hide_to_tray(self):
+        self.root.withdraw()
+        if self.tray_icon:
+            return
+        menu = pystray.Menu(
+            pystray.MenuItem("Show", self.show_from_tray),
+            pystray.MenuItem("Exit", self.exit_app),)
+        self.tray_icon = pystray.Icon(APP_NAME,
+            create_tray_image(),f"{APP_NAME} {APP_VERSION}",menu)
+        threading.Thread(target=self.tray_icon.run, daemon=True).start()
+
+    def show_from_tray(self, icon=None, item=None):
+        if self.tray_icon:
+            self.tray_icon.stop()
+            self.tray_icon = None
+
+        self.root.after(0, self.root.deiconify)
+
+    def exit_app(self, icon=None, item=None):
+        if self.tray_icon:
+            self.tray_icon.stop()
+        self.root.destroy()
 
     # ---------------- DDNS LOOP ---------------- #
     def start_ddns_thread(self):
@@ -157,3 +209,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
