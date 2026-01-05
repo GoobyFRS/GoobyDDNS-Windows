@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw
 from pathlib import Path
 from datetime import datetime
 
-APP_VERSION = str("0.9.2-build-c")
+APP_VERSION = str("0.9.2-build-d")
 APP_NAME = "GoobyDDNS"
 CHECK_INTERVAL = 600  # 10 Minutes
 
@@ -88,7 +88,7 @@ class DDNSApp:
         self.root.title(f"GoobyDDNS {APP_VERSION}")
         #self.root.iconbitmap(BASE_PATH / "goobyddns.ico")
         self.root.geometry("220x120")
-        self.root.minsize(220, 80)
+        self.root.minsize(220, 90)
         self.root.maxsize(520, 160)
         #self.root.resizable(True, False)
 
@@ -104,7 +104,7 @@ class DDNSApp:
         self.root.protocol("WM_DELETE_WINDOW", self.hide_to_tray)
 
     def show_check_for_updates(self):
-        webbrowser.open("https://https://github.com/GoobyFRS/GoobyDDNS")
+        webbrowser.open("https://github.com/GoobyFRS/GoobyDDNS-Windows")
 
     def build_ui(self):
         frame = ttk.Frame(self.root, padding=10)
