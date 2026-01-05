@@ -35,11 +35,7 @@ jobs:
 
       - name: Build one-file EXE
         run: |
-          venv\Scripts\pyinstaller ^
-            --onefile ^
-            --noconsole ^
-            --add-data "template.ini;." ^
-            app.py
+          venv\Scripts\pyinstaller --onefile --noconsole --add-data "template.ini;." --name GoobyDNS app.py
 
       - name: Rename one-file output
         run: |
@@ -50,11 +46,7 @@ jobs:
 
       - name: Build one-dir EXE
         run: |
-          venv\Scripts\pyinstaller ^
-            --onedir ^
-            --noconsole ^
-            --add-data "template.ini;." ^
-            app.py
+          venv\Scripts\pyinstaller --onedir --noconsole --add-data "template.ini;." --name GoobyDNS app.py
 
       - name: Zip one-dir output
         run: |
