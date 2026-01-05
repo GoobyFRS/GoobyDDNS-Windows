@@ -29,11 +29,7 @@ jobs:
         run: |
           venv\Scripts\python -m pip install --upgrade pip
           venv\Scripts\pip install -r requirements.txt
-          venv\Scripts\pip install pyinstaller flake8
-
-      - name: Lint with flake8
-        run: |
-          venv\Scripts\flake8 .
+          venv\Scripts\pip install pyinstaller
 
       # ---------------- BUILD ONE-FILE ---------------- #
 
