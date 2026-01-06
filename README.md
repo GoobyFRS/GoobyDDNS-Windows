@@ -2,7 +2,7 @@
 
 GoobyDDNS Client for Windows. It's like the NoIP DUC but for your own domain and with Akamai / Linode Name Servers. __I'll add multi-platform support at 10 Stars.__
 
-![img](URL)
+![DefaultView](https://github.com/user-attachments/assets/afa44bbe-99a1-45f1-96e5-ee5c0beffe2b)
 
 **You'll need...**
 
@@ -17,4 +17,4 @@ venv\Scripts\activate
 pyinstaller --onefile --noconsole --add-data "template.ini;." --name GoobyDDNS app.py
 ```
 
-Linux Users should consider [GoobyDDNS_Linux]()
+Linux Users should consider [GoobyDDNS_Linux](https://github.com/GoobyFRS/GoobyDDNS)
