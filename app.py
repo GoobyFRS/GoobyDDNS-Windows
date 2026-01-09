@@ -14,10 +14,12 @@ from PIL import Image, ImageDraw
 from pathlib import Path
 from datetime import datetime
 
-APP_VERSION = str("0.9.2-build-d")
+APP_VERSION = str("0.9.3-build-a")
 APP_NAME = "GoobyDDNS"
 CHECK_INTERVAL = 600  # 10 Minutes
-
+GITHUB_URL = "https://github.com/GoobyFRS/GoobyDDNS-Windows"
+ISSUES_URL = "https://github.com/GoobyFRS/GoobyDDNS-Windows/issues"
+WIKI_URL = "https://github.com/GoobyFRS/GoobyDDNS-Windows/wiki"
 CONFIG_NAME = "running_config.ini"
 TEMPLATE_NAME = "template.ini"
 
@@ -87,7 +89,7 @@ class DDNSApp:
         self.root = root
         self.root.title(f"GoobyDDNS {APP_VERSION}")
         #self.root.iconbitmap(BASE_PATH / "goobyddns.ico")
-        self.root.geometry("220x120")
+        self.root.geometry("320x120")
         self.root.minsize(220, 90)
         self.root.maxsize(520, 160)
         #self.root.resizable(True, False)
@@ -103,8 +105,14 @@ class DDNSApp:
         # Intercept window close → tray
         self.root.protocol("WM_DELETE_WINDOW", self.hide_to_tray)
 
-    def show_check_for_updates(self):
-        webbrowser.open("https://github.com/GoobyFRS/GoobyDDNS-Windows")
+    def check_updates(self): # Open GitHub Repo for updates.
+        webbrowser.open(GITHUB_URL)
+
+    def github_report_issue(self): # Launch GitHub Issues Page
+        webbrowser.open(ISSUES_URL)
+    
+    def goto_wiki(self): # Launch GitHub Wiki Page
+        webbrowser.open(WIKI_URL)
 
     def build_ui(self):
         frame = ttk.Frame(self.root, padding=10)
@@ -134,10 +142,17 @@ class DDNSApp:
     def build_menu(self):
         menubar = tk.Menu(self.root)
         file_menu = tk.Menu(menubar, tearoff=0)
-        file_menu.add_command(label="Check for Updates", command=self.show_check_for_updates)
+        file_menu.add_command(label="Check for Updates", command=self.check_updates)
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.exit_app)
         menubar.add_cascade(label="File", menu=file_menu)
+
+        # Help menu
+        help_menu = tk.Menu(menubar, tearoff=0)
+        help_menu.add_command(label="Report Issue", command=self.github_report_issue)
+        help_menu.add_command(label="Go to Wiki", command=self.goto_wiki)
+        menubar.add_cascade(label="Help", menu=help_menu)
+
         self.root.config(menu=menubar)
 
     # ---------------- UI HELPERS ---------------- #
